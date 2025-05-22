@@ -10,8 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    services:
-      # Если нужен PostgreSQL или другая БД, можно добавить здесь
 
     steps:
     - name: Checkout code
