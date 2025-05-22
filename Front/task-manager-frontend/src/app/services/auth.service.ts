@@ -16,7 +16,7 @@ export interface LoginRequest {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5098/api/auth';
+private apiUrl = 'https://to-do-app-t45w.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {}
 
