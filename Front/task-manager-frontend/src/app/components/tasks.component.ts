@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface Task {
   id: number;
@@ -37,38 +38,40 @@ interface Task {
     MatIconModule,
     MatCardModule,
     MatFormFieldModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule
   ],
   template: `
-    <mat-card>
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Мои задачи</h2>
-        <button mat-raised-button color="warn" (click)="logout()">Выйти</button>
-      </div>
-      <form [formGroup]="taskForm" (ngSubmit)="addTask()" style="margin-bottom: 1em; display: flex; gap: 1em; align-items: center;">
-        <mat-form-field appearance="outline" style="flex: 2;">
-          <mat-label>Название задачи</mat-label>
-          <input matInput formControlName="title" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" style="flex: 3;">
-          <mat-label>Описание</mat-label>
-          <input matInput formControlName="description" />
-        </mat-form-field>
-        <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
-        <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid">Добавить</button>
-      </form>
-      <mat-list>
-        <mat-list-item *ngFor="let task of tasks">
-          <mat-card style="width: 100%; margin-bottom: 1em;">
-            <div *ngIf="editTaskId !== task.id" style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
+    <div class="tasks-center-wrapper">
+      <mat-card class="tasks-card">
+        <div class="tasks-header">
+          <h2>Мои задачи</h2>
+          <button mat-raised-button color="warn" (click)="logout()">Выйти</button>
+        </div>
+        <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="task-form">
+          <mat-form-field appearance="outline" class="task-field">
+            <mat-label>Название задачи</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="task-field">
+            <mat-label>Описание</mat-label>
+            <input matInput formControlName="description" />
+          </mat-form-field>
+          <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
+          <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid" class="add-btn">Добавить</button>
+        </form>
+        <mat-divider></mat-divider>
+        <div *ngFor="let task of tasks" class="task-item">
+          <mat-card class="task-inner-card">
+            <div *ngIf="editTaskId !== task.id" class="task-view">
+              <div class="task-title-desc">
                 <span [style.text-decoration]="task.isCompleted ? 'line-through' : 'none'">
                   <strong>{{ task.title }}</strong>
                 </span>
-                <span *ngIf="task.isCompleted" style="color:green;">[Выполнено]</span>
-                <div style="color: #555;">{{ task.description }}</div>
+                <span *ngIf="task.isCompleted" class="done-label">[Выполнено]</span>
+                <div class="desc">{{ task.description }}</div>
               </div>
-              <div>
+              <div class="task-actions">
                 <button mat-icon-button color="primary" (click)="startEdit(task)">
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -77,13 +80,13 @@ interface Task {
                 </button>
               </div>
             </div>
-            <div *ngIf="editTaskId === task.id">
-              <form [formGroup]="editForm" (ngSubmit)="saveEdit(task)" style="display: flex; gap: 1em; align-items: center;">
-                <mat-form-field appearance="outline" style="flex: 2;">
+            <div *ngIf="editTaskId === task.id" class="task-edit">
+              <form [formGroup]="editForm" (ngSubmit)="saveEdit(task)">
+                <mat-form-field appearance="outline" class="task-field">
                   <mat-label>Название задачи</mat-label>
                   <input matInput formControlName="title" />
                 </mat-form-field>
-                <mat-form-field appearance="outline" style="flex: 3;">
+                <mat-form-field appearance="outline" class="task-field">
                   <mat-label>Описание</mat-label>
                   <input matInput formControlName="description" />
                 </mat-form-field>
@@ -93,9 +96,9 @@ interface Task {
               </form>
             </div>
           </mat-card>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+        </div>
+      </mat-card>
+    </div>
   `
 })
 export class TasksComponent implements OnInit {
@@ -204,7 +207,7 @@ export class TasksComponent implements OnInit {
         this.snackBar.open('Задача обновлена!', 'OK', { duration: 2000 });
       },
       error: (err) => {
-        this.snackBar.open(err.error || 'Ошибка ��едактирования задачи', 'OK', { duration: 3000 });
+        this.snackBar.open(err.error || 'Ошибка редактирования задачи', 'OK', { duration: 3000 });
       }
     });
   }

@@ -7,8 +7,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// --- CORS ---
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -18,12 +17,15 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// --- EF Core ---
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// --- Controllers ---
 builder.Services.AddControllers();
 
+// --- JWT Authentication ---
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(options =>
 {
@@ -44,11 +46,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// --- Swagger + JWT ---
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskManager API", Version = "v1" });
 
-    // Добавляем схему безопасности для JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -77,17 +80,18 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-app.MapControllers();
-// Configure the HTTP request pipeline.
+// --- Middleware (порядок важен!) ---
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseAuthentication();
-    app.UseAuthorization();
-    app.UseCors("AllowAll");
 }
 
-app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

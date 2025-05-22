@@ -30,7 +30,7 @@ h2 {
   text-align: center;
 }
 
-.register-form {
+.login-form, .register-form {
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -72,4 +72,19 @@ a:hover {
 mat-error {
   font-size: 0.95em;
   color: #d81b60;
+}
+
+/* --- Адаптивность для мобильных --- */
+@media (max-width: 500px) {
+  mat-card {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1em 0.5em 0.5em 0.5em;
+  }
+  h2 {
+    font-size: 1.1em;
+  }
+  .form-link {
+    font-size: 0.95em;
+  }
 }

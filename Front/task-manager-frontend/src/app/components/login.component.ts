@@ -10,10 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss', './login-register-mobile.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -23,36 +24,116 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   template: `
-    <mat-card style="max-width: 400px; margin: 2em auto;">
-      <h2 style="text-align:center;">Вход</h2>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 1em;">
-        <mat-form-field appearance="outline">
-          <mat-label>Имя пользователя</mat-label>
-          <input matInput formControlName="username" />
-          <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-            Имя пользователя обязательно
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Пароль</mat-label>
-          <input matInput type="password" formControlName="password" />
-          <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            Пароль обязателен
-          </mat-error>
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Войти</button>
-      </form>
-      <div style="text-align:center; margin-top:1em;">
-        Нет аккаунта? <a routerLink="/register">Зарегистрироваться</a>
-      </div>
-    </mat-card>
+    <div class="center-wrapper">
+      <mat-card class="login-card">
+        <mat-card-header>
+          <mat-card-title>Вход в систему</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Имя пользователя</mat-label>
+              <input matInput formControlName="username" />
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                Имя пользователя обязательно
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Пароль</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                Пароль обязателен
+              </mat-error>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" class="login-button">
+              <mat-icon>login</mat-icon> Войти
+            </button>
+          </form>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="register-link">
+            Нет аккаунта? <a routerLink="/register" class="register-button">Зарегистрироваться</a>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  `,
+  styles: [`
+    .center-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+      background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    .login-card {
+      max-width: 400px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      border-radius: 12px;
+      background-color: white;
+    }
+    mat-card-header {
+      justify-content: center;
+      margin-bottom: 24px;
+      padding: 0;
+    }
+    mat-card-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+    .full-width {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    .login-button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 8px;
+      border-radius: 6px;
+      height: 48px;
+    }
+    .register-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #666;
+    }
+    .register-button {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 4px;
+    }
+    .register-button:hover {
+      text-decoration: underline;
+    }
   `
-})
+]})
 export class LoginComponent {
   loginForm: FormGroup;
+  hidePassword = true;
 
   constructor(
     private fb: FormBuilder,

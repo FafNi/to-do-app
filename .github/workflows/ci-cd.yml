@@ -23,15 +23,15 @@ jobs:
 
     - name: Restore backend dependencies
       run: dotnet restore
-      working-directory: ./Back # или . если проект в корне
+      working-directory: . # или . если проект в корне
 
     - name: Build backend
       run: dotnet build --no-restore --configuration Release
-      working-directory: ./Back
+      working-directory: .
 
     - name: Test backend
       run: dotnet test --no-build --verbosity normal
-      working-directory: ./Back
+      working-directory: .
 
     # --- Frontend (Angular) ---
     - name: Setup Node.js

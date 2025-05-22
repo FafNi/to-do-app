@@ -1,15 +1,20 @@
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block;
   min-height: 100vh;
   background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%);
   font-family: 'Montserrat', Arial, sans-serif;
 }
 
-mat-card {
+.tasks-center-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.tasks-card {
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
   margin: 3em auto 0 auto;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   border-radius: 20px;
@@ -17,16 +22,37 @@ mat-card {
   background: rgba(255,255,255,0.97);
 }
 
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1em;
+}
+
 h2 {
   font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 700;
   color: #1976d2;
-  margin-bottom: 1em;
+  margin: 0;
   letter-spacing: 1px;
 }
 
-mat-form-field {
-  width: 100%;
+.task-form {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+}
+
+.task-field {
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+.add-btn {
+  margin-left: auto;
 }
 
 button[mat-raised-button], button[mat-icon-button] {
@@ -34,19 +60,64 @@ button[mat-raised-button], button[mat-icon-button] {
   letter-spacing: 1px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 button[mat-raised-button]:hover, button[mat-icon-button]:hover {
   background: #1565c0;
+  transform: translateY(-2px);
 }
 
-mat-list-item {
+.task-item {
+  margin-top: 1em;
+}
+
+.task-inner-card {
+  padding: 1em 1.5em;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  background: #fafbfc;
   margin-bottom: 1em;
 }
 
-mat-card mat-card {
-  margin-bottom: 1em;
+.task-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-title-desc {
+  display: flex;
+  flex-direction: column;
+  /* Добавлено для переноса длинных слов */
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.task-actions {
+  margin-left: 1em;
+  display: flex;
+  gap: 0.5em;
+}
+
+.task-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.done-label {
+  color: #43a047;
+  margin-left: 0.5em;
+}
+
+.desc {
+  color: #555;
+  font-size: 0.98em;
+  margin-top: 0.2em;
+  /* Добавлено для переноса длинных слов */
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -57,4 +128,52 @@ a {
 }
 a:hover {
   color: #d81b60;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* --- Адаптивность для мобильных --- */
+@media (max-width: 700px) {
+  .tasks-card {
+    max-width: 98vw;
+    padding: 1em 0.5em 0.5em 0.5em;
+    margin: 1em auto 0 auto;
+  }
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+  .task-form {
+    flex-direction: column;
+    gap: 0.7em;
+    align-items: stretch;
+  }
+  .add-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+  .task-inner-card {
+    padding: 0.7em 0.5em;
+  }
+  .task-view {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5em;
+  }
+  .task-actions {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 400px) {
+  .tasks-card {
+    padding: 0.5em 0.1em 0.1em 0.1em;
+  }
+  h2 {
+    font-size: 1.1em;
+  }
 }
