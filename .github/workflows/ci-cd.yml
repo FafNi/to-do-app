@@ -1,0 +1,54 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      # Если нужен PostgreSQL или другая БД, можно добавить здесь
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # --- Backend (ASP.NET Core) ---
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore backend dependencies
+      run: dotnet restore
+      working-directory: ./Back # или . если проект в корне
+
+    - name: Build backend
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./Back
+
+    - name: Test backend
+      run: dotnet test --no-build --verbosity normal
+      working-directory: ./Back
+
+    # --- Frontend (Angular) ---
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install frontend dependencies
+      run: npm ci
+      working-directory: ./Front/task-manager-frontend
+
+    - name: Build frontend
+      run: npm run build --if-present
+      working-directory: ./Front/task-manager-frontend
+
+    - name: Test frontend
+      run: npm run test -- --watch=false --browsers=ChromeHeadless
+      working-directory: ./Front/task-manager-frontend
