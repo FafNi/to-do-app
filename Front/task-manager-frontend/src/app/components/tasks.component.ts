@@ -42,63 +42,61 @@ interface Task {
     MatDividerModule
   ],
   template: `
-    <div class="tasks-center-wrapper">
-      <mat-card class="tasks-card">
-        <div class="tasks-header">
-          <h2>Мои задачи</h2>
-          <button mat-raised-button color="warn" (click)="logout()">Выйти</button>
-        </div>
-        <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="task-form">
-          <mat-form-field appearance="outline" class="task-field">
-            <mat-label>Название задачи</mat-label>
-            <input matInput formControlName="title" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="task-field">
-            <mat-label>Описание</mat-label>
-            <input matInput formControlName="description" />
-          </mat-form-field>
-          <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
-          <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid" class="add-btn">Добавить</button>
-        </form>
-        <mat-divider></mat-divider>
-        <div *ngFor="let task of tasks" class="task-item">
-          <mat-card class="task-inner-card">
-            <div *ngIf="editTaskId !== task.id" class="task-view">
-              <div class="task-title-desc">
-                <span [style.text-decoration]="task.isCompleted ? 'line-through' : 'none'">
-                  <strong>{{ task.title }}</strong>
-                </span>
-                <span *ngIf="task.isCompleted" class="done-label">[Выполнено]</span>
-                <div class="desc">{{ task.description }}</div>
-              </div>
-              <div class="task-actions">
-                <button mat-icon-button color="primary" (click)="startEdit(task)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="deleteTask(task)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
+    <mat-card class="tasks-card">
+      <div class="tasks-header">
+        <h2>Мои задачи</h2>
+        <button mat-raised-button color="warn" (click)="logout()">Выйти</button>
+      </div>
+      <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="task-form">
+        <mat-form-field appearance="outline" class="task-field">
+          <mat-label>Название задачи</mat-label>
+          <input matInput formControlName="title" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="task-field">
+          <mat-label>Описание</mat-label>
+          <input matInput formControlName="description" />
+        </mat-form-field>
+        <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
+        <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid">Добавить</button>
+      </form>
+      <mat-divider></mat-divider>
+      <div *ngFor="let task of tasks" class="task-item">
+        <mat-card class="task-inner-card">
+          <div *ngIf="editTaskId !== task.id" class="task-view">
+            <div>
+              <span [style.text-decoration]="task.isCompleted ? 'line-through' : 'none'">
+                <strong>{{ task.title }}</strong>
+              </span>
+              <span *ngIf="task.isCompleted" class="done-label">[Выполнено]</span>
+              <div class="desc">{{ task.description }}</div>
             </div>
-            <div *ngIf="editTaskId === task.id" class="task-edit">
-              <form [formGroup]="editForm" (ngSubmit)="saveEdit(task)">
-                <mat-form-field appearance="outline" class="task-field">
-                  <mat-label>Название задачи</mat-label>
-                  <input matInput formControlName="title" />
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="task-field">
-                  <mat-label>Описание</mat-label>
-                  <input matInput formControlName="description" />
-                </mat-form-field>
-                <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
-                <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">Сохранить</button>
-                <button mat-button type="button" (click)="cancelEdit()">Отмена</button>
-              </form>
+            <div>
+              <button mat-icon-button color="primary" (click)="startEdit(task)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteTask(task)">
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
-          </mat-card>
-        </div>
-      </mat-card>
-    </div>
+          </div>
+          <div *ngIf="editTaskId === task.id" class="task-edit">
+            <form [formGroup]="editForm" (ngSubmit)="saveEdit(task)">
+              <mat-form-field appearance="outline" class="task-field">
+                <mat-label>Название задачи</mat-label>
+                <input matInput formControlName="title" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="task-field">
+                <mat-label>Описание</mat-label>
+                <input matInput formControlName="description" />
+              </mat-form-field>
+              <mat-checkbox formControlName="isCompleted">Выполнено</mat-checkbox>
+              <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">Сохранить</button>
+              <button mat-button type="button" (click)="cancelEdit()">Отмена</button>
+            </form>
+          </div>
+        </mat-card>
+      </div>
+    </mat-card>
   `
 })
 export class TasksComponent implements OnInit {
@@ -140,7 +138,7 @@ export class TasksComponent implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get<Task[]>('http://localhost:5098/api/task', { headers }).subscribe({
+    this.http.get<Task[]>('https://to-do-app-t45w.onrender.com/api/task', { headers }).subscribe({
       next: (tasks) => {
         this.tasks = tasks;
       },
@@ -162,7 +160,7 @@ export class TasksComponent implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post<Task>('http://localhost:5098/api/task', this.taskForm.value, { headers }).subscribe({
+    this.http.post<Task>('https://to-do-app-t45w.onrender.com/api/task', this.taskForm.value, { headers }).subscribe({
       next: (task) => {
         this.tasks.push(task);
         this.taskForm.reset({ title: '', description: '', isCompleted: false });
@@ -200,7 +198,7 @@ export class TasksComponent implements OnInit {
       ...this.editForm.value
     };
 
-    this.http.put(`http://localhost:5098/api/task/${task.id}`, updatedTask, { headers }).subscribe({
+    this.http.put(`https://to-do-app-t45w.onrender.com/api/task/${task.id}`, updatedTask, { headers }).subscribe({
       next: () => {
         Object.assign(task, this.editForm.value);
         this.editTaskId = null;
@@ -226,7 +224,7 @@ export class TasksComponent implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.delete(`http://localhost:5098/api/task/${task.id}`, { headers }).subscribe({
+    this.http.delete(`https://to-do-app-t45w.onrender.com/api/task/${task.id}`, { headers }).subscribe({
       next: () => {
         this.tasks = this.tasks.filter(t => t.id !== task.id);
         this.snackBar.open('Задача удалена!', 'OK', { duration: 2000 });
