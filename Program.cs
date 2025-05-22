@@ -94,4 +94,10 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
+    db.Database.Migrate();
+}
+
 app.Run();
